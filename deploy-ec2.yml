@@ -1,0 +1,22 @@
+- hosts: localhost
+  connection: local
+
+  tasks:
+  - name: Create 3 Virtual Machines for Managed Nodes
+    amazon.aws.ec2_instance:
+      name: "{{ item.name }}"
+      key_name: "cloudcareermentor"
+      instance_type: t2.micro
+      security_group: sg-05567d1c5149733d8
+      region: eu-west-1
+      aws_access_key: "{{aws_access_key}}"  
+      aws_secret_key: "{{aws_secret_key}}" 
+      network:
+        assign_public_ip: true
+      image_id: "{{ item.image }}"
+      tags:
+        environment: "{{ item.name }}"
+    loop:
+      - { image: "ami-0bd0f7e25c32e69f6", name: "node-1" } 
+      - { image: "ami-0c38b837cd80f13bb", name: "node-2" }
+      - { image: "ami-0c38b837cd80f13bb", name: "node-3" }
